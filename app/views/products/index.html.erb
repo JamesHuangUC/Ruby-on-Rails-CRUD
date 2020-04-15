@@ -1,0 +1,84 @@
+<main role="main">
+<div class="album py-5 bg-light">
+<div class="container">
+
+<% if @products.any? %>
+    <div class="row">
+        <% @products.each do |product| %>
+            <div class="col-md-4">
+                <div class="card mb-4 box-shadow">
+                    <img class="card-img-top" src="<%= product.cover %>" alt="<%= product.product_name %>">
+                    <div class="card-body">
+                        <h5 class="card-title"><%= product.product_name %></h5>
+                        <p class="card-text text-truncate"><%= product.description %></p>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="btn-group">
+                                <button type="button" class="btn btn-sm btn-outline-secondary"><%= link_to 'View', product_path(product), class: "view-btn" %></button>
+                                <% if logged_in? && current_user.id == product.user.id %>
+                                    <button type="button" class="btn btn-sm btn-outline-secondary"><%= link_to 'Edit', edit_product_path(product), class: "view-btn" %></button>
+                                <% end %>
+                            </div>
+                            <small class="text-muted">$<%= product.price %></small>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        <% end %>
+    </div>
+
+    <ul class="pagination text-center">
+        <% if @current_page == 1 %>
+            <li class="page-item disabled">
+                <%= link_to "First", "", :class => "page-link" %>
+            </li>
+        <% else %>
+            <li class="page-item">
+                <%= link_to "First", "/products?page=1", :class => "page-link" %>
+            </li>
+        <% end %>
+
+        <% i = @current_page > 5 ? @current_page - 4 : 1 %>
+        <% if i != 1 %>
+            <li class="page-item disabled">
+                <%= link_to "...", "", :class => "page-link" %>
+            </li>
+        <% end %>
+        <% while i <= @current_page + 4 && i <= @total_pages %>
+            <% if i == @current_page %>
+                <li class="page-item active">
+                    <%= link_to "#{i}", "", :class => "page-link" %>
+                </li>
+            <% else %>
+                <li class="page-item">
+                    <%= link_to "#{i}", products_path(page: i ), :class => "page-link" %>
+                </li>
+            <% end %>
+            <% if i == @current_page + 4 && i < @total_pages %>
+                <li class="page-item disabled">
+                    <%= link_to "...", "", :class => "page-link disabled" %>
+                </li>
+            <% end %>
+            <% i += 1 %>
+        <% end %>
+
+        <% if @current_page == @total_pages %>
+            <li class="page-item disabled">
+                <%= link_to "Last", "", :class => "page-link" %>
+            </li>
+        <% else %>
+            <li class="page-item">
+                <%= link_to "Last", "/products?page=#{@total_pages}", :class => "page-link" %>
+            </li>
+        <% end %>
+    </ul>
+
+<% else %>
+
+    <div class="row">
+        <p>No products available</p>
+    </div>
+<% end %>
+
+</div>
+</div>
+</main>

@@ -1,0 +1,23 @@
+<header>
+    <div class="d-flex flex-column flex-md-row align-items-center p-3 px-md-4 mb-3 bg-white border-bottom shadow-sm">
+        <h5 class="my-0 mr-md-auto font-weight-normal">
+            <%= link_to "Online Store", root_path, :class => 'brand-name' %>
+        </h5>
+        <nav class="my-2 my-md-0 mr-md-3">
+            <% if logged_in? %>
+                <%= link_to "Dashboard", dashboard_path, :class => "p-2 text-dark" %>
+                <%= link_to "Add", new_product_path, :class => "p-2 text-dark" %>
+                <%= link_to "Generate", generate_path, class: "p-2 text-dark", method: :post %>
+                <%= link_to "Clean", clean_path, class: "p-2 text-dark", method: :delete %>
+            <% else %>
+                <%= link_to "Register", register_path, :class => "p-2 text-dark" %>
+            <% end %>
+
+            <%= session_link %>
+        </nav>
+        <%= form_tag(products_path, method: "get", class: "form-inline my-2 my-lg-0") do %>
+        <%= text_field_tag(:term, params[:term], type: "search", placeholder: raw("&#xF002; category..."), class: "form-control mr-sm-2", style: "font-family: roboto, 'Font Awesome 5 Free'") %>
+        <%= submit_tag("Search", name: nil, class: "btn btn-outline-primary my-2 my-sm-0") %>
+        <% end %>
+    </div>
+</header>
